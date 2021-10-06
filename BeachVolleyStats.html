@@ -1,0 +1,736 @@
+﻿<html>
+
+<head>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+        @media only screen and (orientation:portrait) {
+            body {
+                height: 100vw;
+                transform: rotate(90deg);
+            }
+        }
+
+        /*BOTTONS*/
+        * {
+            font-family: sans-serif;
+            text-align: center;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .btn {
+            border: none;
+            outline: none;
+            padding: 10px 16px;
+            background-color: #f1f1f1;
+            color: black;
+            cursor: pointer;
+        }
+
+
+            /* Style the active class (and buttons on mouse-over) */
+            .active, .btn:hover {
+                background-color: #666;
+                color: white;
+            }
+        /*FORMS*/
+        .sections {
+            margin-top: 300px;
+        }
+
+        .form {
+            margin-left: 20%;
+            width: 50%;
+            position: relative;
+            height: 50px;
+            overflow: hidden;
+        }
+
+            .form input {
+                width: 100%;
+                height: 100%;
+                color: blue;
+                padding-top: 20px;
+                border: none;
+                outline: none;
+            }
+
+            .form label {
+                position: absolute;
+                bottom: 0px;
+                left: 0%;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                border-bottom: 1px solid black;
+            }
+
+                .form label::after {
+                    content: "";
+                    position: absolute;
+                    height: 100%;
+                    width: 100%;
+                    border-bottom: 3px solid blue;
+                    left: 0px;
+                    bottom: -1px;
+                    transform: translate(-100%);
+                    transition: transform 0.3s ease;
+                }
+
+        .content-name {
+            position: absolute;
+            bottom: 5px;
+            left: 0px;
+            transition: all 0.3s ease;
+        }
+
+        .form input:focus + .label-name .content-name {
+            transform: translateY(-150%);
+            font-size: 14px;
+            color: blue;
+        }
+
+        .form input:focus + .label-name::after,
+        .form input:valid + .label-name::after {
+            transform: translateX(0%);
+        }
+
+        /*FOR PLAYGAME */
+        .row {
+            margin-top: 10px;
+        }
+
+        .paselect {
+            width: 19%;
+            font-size: 100%;
+        }
+
+        .gameScreen {
+            float: left;
+            border: 3px solid black;
+            width: 60%;
+            margin-left: 20%;
+            overflow: auto;
+        }
+
+        .left {
+            float: left;
+            border: 1px solid black;
+            padding: 20%;
+            margin: 3% 0% 8% 10%;
+        }
+
+        .right {
+            float: left;
+            border: 1px solid black;
+            margin: 3% 0;
+            padding: 20%;
+        }
+
+        #menu {
+            display: none;
+            width: 10%;
+            box-shadow: 2px 2px 2px #999;
+            border-radius: 0.2rem;
+            list-style: none;
+            position: fixed;
+        }
+
+        #menuPower {
+            display: none;
+            width: 10%;
+            box-shadow: 2px 2px 2px #999;
+            border-radius: 0.2rem;
+            list-style: none;
+            position: fixed;
+        }
+
+        .menu-item {
+            border: 1px solid black;
+            height: 1.5rem;
+            cursor: pointer;
+        }
+
+        #O {
+            display: none;
+            font-size: 100%;
+        }
+
+        #X {
+            display: none;
+            font-size: 100%;
+        }
+
+        /* only when orientation is in portrait mode */
+        @media all and (orientation:portrait) {
+            #info {
+                display: block;
+            }
+        }
+    </style>
+
+    <title>Beach Volley Stats</title>
+</head>
+<body>
+
+    <div id="Page1">
+        <h1>NEW GAME</h1>
+        <div class="form">
+            <input type="text" name="name" autocomplete="off" id="gameName" value="" />
+            <label for="name" class="label-name">
+                <span class="content-name">Round</span>
+            </label>
+        </div>
+        <div class="form">
+            <input type="text" name="name" autocomplete="off" id="place" value="" />
+            <label for="name" class="label-name">
+                <span class="content-name">Place</span>
+            </label>
+        </div>
+        <div class="form">
+            <input type="text" name="name" autocomplete="off" id="date" value="" />
+            <label for="name" class="label-name">
+                <span class="content-name">Date</span>
+            </label>
+        </div>
+        <div class="form">
+            <input type="text" name="name" autocomplete="off" id="player1Name" value="" />
+            <label for="name" class="label-name">
+                <span class="content-name">Player 1</span>
+            </label>
+        </div>
+        <div class="form">
+            <input type="text" name="name" autocomplete="off" id="player2Name" value="" />
+            <label for="name" class="label-name">
+                <span class="content-name">Player 2</span>
+            </label>
+        </div>
+
+        <div style="float:right;margin:5% 41% 0 0;padding:8px 8px;">
+            <button class="btn" onclick="go2GamePage(); choosePage(this);" id="showPage2">READY</button>
+        </div>
+
+
+
+    </div>
+
+    <div id="Page2" style="display:none">
+        <div class="row">
+            <select class="paselect" onchange="updateValues(this.value);">
+                <option value="0">ΣΕΤ 1</option>
+                <option value="1">ΣΕΤ 2</option>
+                <option value="2">ΣΕΤ 3</option>
+            </select>
+        </div>
+        <div class="row">
+            <div id="selectPlayer">
+                <button class="btn" onclick="toggleClassPlayer(this);" id="p1" style="margin-right:5%;">Player 1</button>
+                <button class="btn active" onclick="toggleClassPlayer(this);" id="p2">Player 2</button>
+            </div>
+        </div>
+
+        <div style="margin-top:10px;">
+
+            <div class="gameScreen" id="gameScreen" onclick="takeCoords(event)">
+                <div id="selectBlock" style="margin-top:10px;">
+                    <button class="btn active" onclick="toggleClassBlock(this);" id="b1" style="margin-right:5%;">block line</button>
+                    <button class="btn" onclick="toggleClassBlock(this);" id="b2">block cross</button>
+                </div>
+                <div class="left">
+                </div>
+                <div class="right">
+                </div>
+            </div>
+        </div>
+        <div style="float:right;margin:0% 41% 0 0;padding:8px 8px;">
+            <button class="btn" onclick="choosePage(this);" id="showPage3">READY</button>
+        </div>
+        <ul id="menu">
+            <li class="menu-item" onclick="togglePoint(this)" id="point">Point</li>
+            <li class="menu-item" onclick="togglePoint(this)" id="play">Play</li>
+            <li class="menu-item" onclick="togglePoint(this)" id="error">Error</li>
+        </ul>
+
+        <ul id="menuPower">
+            <li class="menu-item" onclick="togglePower(this)" id="hit">Hit</li>
+            <li class="menu-item" onclick="togglePower(this)" id="shot">Shot</li>
+
+        </ul>
+
+        <div id="O">O</div>
+        <div id="X">X</div>
+    </div>
+
+    <div id="Page3" style="display:none">
+        <div class="row"><h1>VIEW STATS</h1></div>
+        <div class="row">
+            <select class="inRow" onchange="updateSetsP3(this.value);">
+                <option value="0">Select Set</option>
+                <option value="1">Set 1</option>
+                <option value="2">Set 2</option>
+                <option value="3">Set 3</option>
+                <option value="4">All</option>
+            </select>
+            <select class="inRow" onchange="updatePlayerP3(this.value);">
+                <option value="0">Select Player</option>
+                <option value="1" id="p1page3">Player 1</option>
+                <option value="2" id="p2page3">Player 2</option>
+                <option value="3">Both</option>
+            </select>
+            <select class="inRow" onchange="updateBlockP3(this.value);">
+                <option value="0">Select Block</option>
+                <option value="1">Block Line</option>
+                <option value="2">Block Cross</option>
+                <option value="3">Both</option>
+            </select>
+            <select class="inRow" onchange="updatePointP3(this.value);">
+                <option value="0">Select if Score</option>
+                <option value="1">Winners</option>
+                <option value="2">Play</option>
+                <option value="3">Errors</option>
+                <option value="4">All</option>
+            </select>
+            <select class="inRow" onchange="updatePowerP3(this.value);">
+                <option value="0">Select Power</option>
+                <option value="1">Hits</option>
+                <option value="2">Shots</option>
+                <option value="3">All</option>
+            </select>
+        </div>
+
+
+        <div class="row">
+
+            <canvas class="gameScreen" id="viewScreen"></canvas>
+        </div>
+        <div style="float:right;margin:1% 41% 0 0;padding:8px 8px;">
+            <button class="btn" onclick="showHits();" id="">VIEW</button>
+        </div>
+    </div>
+    <div id="Page4" style="display:none">
+        Content of page 2
+        <button onclick="choosePage(this);" id="showPage2">Show page 1</button>
+    </div>
+
+
+    <script>
+        //------------------------------------------FOR PAGE 1---------------------------------
+        var gameInfo = {
+            gameName: [],
+            place: [],
+            date: [],
+            player1: [],
+            player2: []
+        };
+        function go2GamePage() {
+            gameInfo.gameName.push(document.getElementById("gameName").value);
+            gameInfo.place.push(document.getElementById("place").value);
+            gameInfo.date.push(document.getElementById("date").value);
+            gameInfo.player1.push(document.getElementById("player1Name").value);
+            gameInfo.player2.push(document.getElementById("player2Name").value);
+
+            //changing buttons name from player 1 and 2 to our
+
+            if (gameInfo.player1[gameInfo.player1.length - 1] != "") {
+                document.querySelector("#p1").textContent = gameInfo.player1[gameInfo.player1.length - 1];
+                document.querySelector("#p1page3").textContent = gameInfo.player1[gameInfo.player1.length - 1];
+            }
+            if (gameInfo.player2[gameInfo.player2.length - 1] != "") {
+                document.querySelector("#p2").textContent = gameInfo.player2[gameInfo.player2.length - 1];
+                document.querySelector("#p2page3").textContent = gameInfo.player2[gameInfo.player2.length - 1];
+            }
+
+            //go 2 secont page------
+        }
+
+
+
+
+        //-------------------------------------------FOR PAGE 2----------------------------------
+        //ELEMENTS
+        //the first list of the score or no score
+        var list = document.getElementById("menu");
+        //the list of power hit or shot
+        var listPower = document.getElementById("menuPower");
+        //the hitting point
+        var hittingPoint = document.getElementById("O");
+        //the ball point
+        var ballPoint = document.getElementById("X");
+
+        //VARIABLES
+        //set
+        var set = 1;
+        //initialize the player and the blockline
+        var player1 = false;
+        var blockLine = true;
+        //for scoring a point
+        var score = false;
+        var play = false;
+        var error = false;
+        //for hit or shot
+        var hit = false;
+        var shot = false;
+
+        //initialize  x and y coords
+        var xi;
+        var yi;
+        //  final x and y coords
+        var xf;
+        var yf;
+
+
+
+
+
+
+
+        //ALL MY DATA
+        var data = {
+            set: [],                 //1 or 2 or 3
+            player: [],             //1 or 2
+            block: [],               //1 or 2
+            point: [],              //"score" "play" "error"
+            power: [],               //"hit" "shot"
+            startPosition: {
+                x: [],
+                y: []
+            },
+            endPosition: {
+                x: [],
+                y: []
+            },
+
+        }
+
+        //ZERO EVERYTHING FUNCTION
+        function zeroEverything() {
+            xi = NaN;
+            yi = NaN;
+            xf = NaN;
+            yf = NaN;
+            hit = false;
+            shot = false;
+            zeroScores();
+            //disappearing the first list
+            list.style.display = "none";
+            list.style.top = 200 + "%";
+            //disappearing the power list
+            listPower.style.display = "none";
+            listPower.style.top = 200 + "%";
+            //disappearing the O mark
+            hittingPoint.style.display = "none";
+            hittingPoint.style.top = 200 + "%";
+            //disappearing the X mark
+            ballPoint.style.display = "none";
+            ballPoint.style.top = 200 + "%";
+        }
+        //ZERO Scores FUNCTION
+        function zeroScores() {
+            score = false;
+            play = false;
+            error = false;
+        }
+
+        //UPDATE SETS
+        function updateValues(value) {
+            if (value === "0") {
+                set = 1;
+            }
+            else if (value === "1") {
+                set = 2;
+            } else {
+                set = 3;
+            }
+        }
+
+        //TOGGLE FUNCTIONS
+        function toggleClassPlayer(el) {
+            var player = document.getElementById("selectPlayer").children;    //returns an array of items with selectBlock id
+            for (let i = 0; i < player.length; i++) {
+                player[i].className = "btn";
+            }
+            el.className = "btn active";
+            //changing blockLine parametre
+            if (el.id === "p1") {
+                player1 = true;
+            } else {
+                player1 = false;
+            }
+        }
+
+        function toggleClassBlock(el) {
+            var block = document.getElementById("selectBlock").children;    //returns an array of items with selectBlock id
+            for (let i = 0; i < block.length; i++) {
+                block[i].className = "btn";
+            }
+            el.className = "btn active";
+            //changing blockLine parametre
+            if (el.id === "b1") {
+                blockLine = true;
+            } else {
+                blockLine = false;
+            }
+        }
+
+        function togglePoint(el) {
+            if (el.id === "point") {
+                score = true;
+            } else if (el.id === "play") {
+                play = true;
+            } else {
+                error = true;
+            }
+            //disappearing the first list
+            list.style.display = "none";
+            list.style.top = 200 + "%";
+            //display the list of power
+            listPower.style.position = "absolute";
+            listPower.style.top = yf * gsHeight + gsTop + "px";
+            listPower.style.left = xf * gsWidth + gsLeft + "px";
+            listPower.style.display = "block";
+        }
+
+        function togglePower(el) {
+            if (el.id === "hit") {
+                hit = true;
+            } else {
+                shot = true;
+            }
+            saveEverything();
+            zeroEverything();
+        }
+
+        //SAVE EVERYTHING FUNCTION
+        function saveEverything() {
+            data.startPosition.x.push(xi);
+            data.startPosition.y.push(yi);
+            data.endPosition.x.push(xf);
+            data.endPosition.y.push(yf);
+            data.set.push(set);
+            if (player1 === true) {
+                data.player.push(1);
+            } else {
+                data.player.push(2);
+            }
+            if (blockLine === true) {
+                data.block.push(1);
+            } else {
+                data.block.push(2);
+            }
+            if (score === true) {
+                data.point.push("score");
+            } else if (play === true) {
+                data.point.push("play");
+            } else {
+                data.point.push("error");
+            }
+            if (hit === true) {
+                data.power.push("hit");
+            } else {
+                data.power.push("shot");
+            }
+
+        }
+
+        function takeCoords(event) {
+            //get gameScreen element
+            gs = document.getElementById("gameScreen");
+            gsTop = gs.offsetTop;
+            gsLeft = gs.offsetLeft;
+            gsWidth = gs.offsetWidth;
+            gsHeight = gs.offsetHeight;
+            //get block 1 and 2 element
+            var block1 = document.getElementById("b1");
+            var block2 = document.getElementById("b2");
+            var limLeft = block1.offsetLeft;
+            var limRight = block2.offsetLeft + block2.offsetWidth;
+            var limBot = block1.offsetTop + block1.offsetHeight;
+            if (event.clientY < limBot && event.clientX > limLeft && event.clientX < limRight) { return; }
+            if (event.clientX - gsLeft > gsWidth / 2) {
+                zeroScores();
+                xf = (event.clientX - gsLeft) / gsWidth;  //value 0-1 depends on users screen
+                yf = (event.clientY - gsTop) / gsHeight //value 0-1 depends on users screen
+                //disappearing the second list
+                listPower.style.display = "none";
+                listPower.style.top = 200 + "%";
+                //display the X mark
+                ballPoint.style.position = "absolute";
+                ballPoint.style.top = event.clientY - 10 + "px";
+                ballPoint.style.left = event.clientX - 10 + "px";
+                ballPoint.style.display = "block";
+                //display the list of scoring point
+                list.style.position = "absolute";
+                list.style.top = event.clientY + "px";
+                list.style.left = event.clientX + "px";
+                list.style.display = "block";
+            } else {
+                xi = (event.clientX - gsLeft) / gsWidth; //value 0-1 depends on users screen
+                yi = (event.clientY - gsTop) / gsHeight; //value 0-1 depends on users screen
+                //display the O mark
+                hittingPoint.style.position = "absolute";
+                hittingPoint.style.top = event.clientY - 10 + "px";
+                hittingPoint.style.left = event.clientX - 10 + "px";
+                hittingPoint.style.display = "block";
+            }
+
+        }
+
+        //-------------------------------------------FOR PAGE 3----------------------------------
+        var canvas = document.getElementById("viewScreen");
+        var ctx = canvas.getContext("2d");
+        canvas.height = 57.29166 / 100 * canvas.width;
+
+        //CREATE THE COURT
+        ctx.strokeStyle = "black";
+        ctx.strokeRect(10 / 100 * canvas.width, 8 / 100 * canvas.width, 80 / 100 * canvas.width, 68 / 100 * canvas.height);
+        ctx.beginPath();
+        ctx.moveTo(50 / 100 * canvas.width, 8 / 100 * canvas.width);
+        ctx.lineTo(50 / 100 * canvas.width, 82 / 100 * canvas.height);
+        ctx.stroke();
+
+        var setP3 = 0;
+        var playerP3 = 0;
+        var blockP3 = 0;
+        var pointP3 = "0";
+        var powerP3 = "0";
+
+        //UPDATE FUNCTIONS
+        function updateSetsP3(value) {
+            if (value === "1") {
+                setP3 = 1;
+            }
+            else if (value === "2") {
+                setP3 = 2;
+            } else if (value === "3") {
+                setP3 = 3;
+            } else {
+                setP3 = 0;
+            }
+        }
+        function updatePlayerP3(value) {
+            if (value === "1") {
+                playerP3 = 1;
+            }
+            else if (value === "2") {
+                playerP3 = 2;
+            } else {
+                playerP3 = 0;
+            }
+        }
+        function updateBlockP3(value) {
+            if (value === "1") {
+                blockP3 = 1;
+            }
+            else if (value === "2") {
+                blockP3 = 2;
+            } else {
+                blockP3 = 0;
+            }
+        }
+        function updatePointP3(value) {
+            if (value === "1") {
+                pointP3 = "score";
+            }
+            else if (value === "2") {
+                pointP3 = "play";
+            } else if (value === "3") {
+                pointP3 = "error";
+            } else {
+                pointP3 = "0";
+            }
+        }
+        function updatePowerP3(value) {
+            if (value === "1") {
+                setP3 = "hit";
+            }
+            else if (value === "2") {
+                setP3 = "shot";
+            } else {
+                setP3 = "0";
+            }
+        }
+
+        var myLines = [];
+        var color;
+        function showHits() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            //CREATE THE COURT
+            ctx.strokeStyle = "black";
+            ctx.strokeRect(10 / 100 * canvas.width, 8 / 100 * canvas.width, 80 / 100 * canvas.width, 68 / 100 * canvas.height);
+            ctx.beginPath();
+            ctx.moveTo(50 / 100 * canvas.width, 8 / 100 * canvas.width);
+            ctx.lineTo(50 / 100 * canvas.width, 82 / 100 * canvas.height);
+            ctx.stroke();
+            //zeroing the myLines array
+            myLines.length = 0;
+            data.set.forEach(function (seti, index) {
+                if (seti === setP3 || setP3 === 0) {
+                    if (data.player[index] === playerP3 || playerP3 === 0) {
+                        if (data.block[index] === blockP3 || blockP3 === 0) {
+                            if (data.point[index] === pointP3 || pointP3 === "0") {
+                                if (data.power[index] === powerP3 || powerP3 === "0") {
+                                    //pick color
+                                    if (data.point[index] === "score") {
+                                        color = "green";
+                                    } else if (data.point[index] === "play") {
+                                        color = "blue";
+                                    } else {
+                                        color = "red";
+                                    }
+                                    myLines.push(new lines(data.startPosition.x[index] * canvas.width, data.startPosition.y[index] * canvas.height, data.endPosition.x[index] * canvas.width, data.endPosition.y[index] * canvas.height, color));
+
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            //drawing the lines
+            for (let i = 0; i < myLines.length; i++) {
+                myLines[i].draw();
+            }
+        }
+
+        //LINES CLASS
+        function lines(x1, y1, x2, y2, color) {
+            this.x1 = x1;
+            this.y1 = y1;
+            this.x2 = x2;
+            this.y2 = y2;
+            this.color = color;
+            this.draw = function () {
+                ctx.beginPath();
+                ctx.moveTo(this.x1, this.y1);
+                ctx.lineTo(this.x2, this.y2);
+                ctx.strokeStyle = color;
+                ctx.stroke();
+            }
+        }
+
+
+        //------------------------------------FOR CHANGING PAGES------------------------------
+        var page1 = document.getElementById("Page1");
+        var page2 = document.getElementById("Page2");
+        var page3 = document.getElementById("Page3");
+        function choosePage(el) {
+            page1.style.top = 200 + "%";
+            page1.style.display = "none";
+            page2.style.top = 200 + "%";
+            page2.style.display = "none";
+            page3.style.top = 200 + "%";
+            page3.style.display = "none";
+            if (el.id === "showPage2") {
+                page2.style.top = 0 + "%";
+                page2.style.display = "block";
+            } else if (el.id === "showPage3") {
+                page3.style.top = 0 + "%";
+                page3.style.display = "block";
+            }
+        }
+    </script>
+</body>
+
+</html>
