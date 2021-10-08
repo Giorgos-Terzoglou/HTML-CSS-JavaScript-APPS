@@ -1,0 +1,734 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>SAKIS ΠΡΟΣΦΟΡΑ-ΖΗΤΗΣΗ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <style>
+        * {
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        header {
+            
+            position: sticky;
+            top: 0;
+            background: black;
+            font-size: 50px;
+            color: white;
+        }
+       
+
+        .sakis {
+            font-size: 24px;
+            font-weight: bolder;
+        }
+
+        .giaH1 {
+            font-size: 40px;
+            margin: 0;
+        }
+        
+        
+        
+        .left {
+            border:2px solid black;
+            float: left;
+            width: 29%;           
+            margin: 50px 0 50px 10%;
+        }
+        .left input{
+            width:100%;
+        }
+        .right {
+            float: left;
+            width: 50%;            
+            margin: 70px 0 50px 0;
+            padding-bottom:40px;           
+        }
+        .paselect {           
+            width: 15%;
+            font-size: 100%;
+            margin: 0 42% 15px ;
+        }
+
+        .giaCanvas {
+            width:50%;
+            display: inline-block;
+        }
+        canvas {
+            height: 100%;
+            border: 2px solid black;
+        }
+        @media only screen and (max-width: 1024px) {
+            .giaCanvas {
+                width: 70%;
+                display: inline-block;
+            }
+            
+        }
+        @media only screen and (max-width: 800px) {
+            .giaCanvas {
+                width:100%;
+                display: inline-block;
+            }
+            header {
+                position: sticky;
+                top: 0;
+                background: black;
+                font-size: 35px;
+                color: white;
+            }
+
+
+            .sakis {
+                font-size: 18px;
+                font-weight: bolder;
+            }
+
+            .giaH1 {
+                font-size: 28px;
+                margin: 0;
+            }
+        }
+       
+        
+       
+    </style>
+
+</head>
+<body>
+    <header>
+        <div> 1o ΕΠΑΛ ΞΑΝΘΗΣ</div>
+        <div style="font-size:20px;">&copy ΤΕΡΖΟΓΛΟΥ ΑΘΑΝΑΣΙΟΣ</div>
+    </header>
+    <div><h1 class="giaH1" >ΖΗΤΗΣΗ-ΠΡΟΣΦΟΡΑ-ΣΧΗΜΑΤΙΣΜΟΣ ΤΙΜΩΝ</h1></div>
+    
+    
+
+    
+        <table class="left" border="1">
+            <tr>
+                <th>ΤΙΜH</th>
+                <th>ΠΟΣΟΤΗΤΑ ΖΗΤΗΣΗΣ</th>
+                <th>ΠΟΣΟΤΗΤΑ ΠΡΟΣΦΟΡΑΣ</th>
+            </tr>
+            <tr>
+                <td><input type="number" id="price1" oninput="p1();" min="0"></td>
+                <td><input type="number" id="demandQuantity1" oninput="d1();" min="0" /></td>
+                <td><input type="number" id="offerQuantity1" oninput="o1();" min="0" /></td>
+            </tr>
+            <tr>
+                <td><input type="number" id="price2" oninput="p2();" min="0"></td>
+                <td><input type="number" id="demandQuantity2" oninput="d2();" min="0" /></td>
+                <td><input type="number" id="offerQuantity2" oninput="o2();" min="0" /></td>
+            </tr>
+            <tr>
+                <td><input type="number" id="price3" oninput="p3();" min="0"></td>
+                <td><input type="number" id="demandQuantity3" oninput="d3();" min="0" /></td>
+                <td><input type="number" id="offerQuantity3" oninput="o3();" min="0" /></td>
+            </tr>
+            <tr>
+                <td><input type="number" id="price4" oninput="p4();" min="0"></td>
+                <td><input type="number" id="demandQuantity4" oninput="d4();" min="0" /></td>
+                <td><input type="number" id="offerQuantity4" oninput="o4();" min="0" /></td>
+            </tr>
+            <tr>
+                <td><input type="number" id="price5" oninput="p5();" min="0"></td>
+                <td><input type="number" id="demandQuantity5" oninput="d5();" min="0" /></td>
+                <td><input type="number" id="offerQuantity5" oninput="o5();" min="0" /></td>
+            </tr>
+        </table>
+
+        <div class="right">
+            <div style="margin:0 0 20px 0;">
+                <span>ΜΕΤΑΒΟΛΗ ΤΙΜΗΣ : </span><input type="number" value="0" id="priceRaise" oninput="newValues();" style="width:50px;" /><span> %</span>
+            </div>
+            <div style="margin:0 0 20px 0;">
+                <span>ΜΕΤΑΒΟΛΗ ΠΟΣΟΤΗΤΑΣ ΖΗΤΗΣΗΣ : </span><input type="number" value="0" id="demandRaise" oninput="newValues();" style="width:50px;" /><span> %</span>
+            </div>
+            <div style="margin:0 0 20px 0;">
+                <span>ΜΕΤΑΒΟΛΗ ΠΟΣΟΤΗΤΑΣ ΠΡΟΣΦΟΡΑΣ : </span><input type="number" value="0" id="offerRaise" oninput="newValues();" style="width:50px;" /><span> %</span>
+            </div>
+        </div>
+        
+    
+    <div style="margin-top:10px;">
+        <div>
+            <div>
+                <select class="paselect" onchange="updateValues(this.value);">
+                    <option value="0">ΚΑΜΠΥΛΗ ΖΗΤΗΣΗΣ</option>
+                    <option value="1">ΚΑΜΠΥΛΗ ΠΡΟΣΦΟΡΑΣ</option>
+                    <option value="2">ΣΧΗΜΑΤΙΣΜΟΣ ΤΙΜΩΝ</option>
+                </select>
+            </div>
+
+
+
+            <input type="button" onclick="chart();" value="READY" style="width: 100px; font-size: 17px; margin:auto auto 30px auto;" />
+        </div>
+    </div>
+        
+        <div>
+            <div class="giaCanvas">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+
+    
+   
+    
+      
+
+        <script>
+            var initial = []
+            var final = [];
+            var priceMul = 0;
+            var demandMul = 0;
+            var offerMul = 0;
+            //when input in table, fills the initial or final table
+            function p1() {
+                if (isNaN(priceMul) || priceMul === 0) {                    
+                    initial.price1 = parseFloat(document.getElementById('price1').value);
+                } else {
+                    final.price1 = parseFloat(document.getElementById('price1').value) * (priceMul + 100) / 100;
+                }
+            }
+            function p2() {
+                if (isNaN(priceMul) || priceMul === 0) {
+                    initial.price2 = parseFloat(document.getElementById('price2').value);
+                } else {
+                    final.price2 = parseFloat(document.getElementById('price2').value) * (priceMul + 100) / 100;
+                }
+            }
+            function p3() {
+                if (isNaN(priceMul) || priceMul === 0) {
+                    initial.price3 = parseFloat(document.getElementById('price3').value);
+                } else {
+                    final.price3 = parseFloat(document.getElementById('price3').value) * (priceMul + 100) / 100;
+                }
+            }
+            function p4() {
+                if (isNaN(priceMul) || priceMul === 0) {
+                    initial.price4 = parseFloat(document.getElementById('price4').value);
+                } else {
+                    final.price4 = parseFloat(document.getElementById('price4').value) * (priceMul + 100) / 100;
+                }
+            }
+            function p5() {
+                if (isNaN(priceMul) || priceMul === 0) {
+                    initial.price5 = parseFloat(document.getElementById('price5').value);
+                } else {
+                    final.price5 = parseFloat(document.getElementById('price5').value) * (priceMul + 100) / 100;
+                }
+            }
+
+            function d1() {
+                if (isNaN(demandMul) || demandMul === 0) {
+                    initial.demand1 = parseFloat(document.getElementById('demandQuantity1').value);
+                } else {
+                    final.demand1 = parseFloat(document.getElementById('demandQuantity1').value) * (demandMul + 100) / 100;
+                }
+            }
+            function d2() {
+                if (isNaN(demandMul) || demandMul === 0) {
+                    initial.demand2 = parseFloat(document.getElementById('demandQuantity2').value);
+                } else {
+                    final.demand2 = parseFloat(document.getElementById('demandQuantity2').value) * (demandMul + 100) / 100;
+                }
+            }
+            function d3() {
+                if (isNaN(demandMul) || demandMul === 0) {
+                    initial.demand3 = parseFloat(document.getElementById('demandQuantity3').value);
+                } else {
+                    final.demand3 = parseFloat(document.getElementById('demandQuantity3').value) * (demandMul + 100) / 100;
+                }
+            }
+            function d4() {
+                if (isNaN(demandMul) || demandMul === 0) {
+                    initial.demand4 = parseFloat(document.getElementById('demandQuantity4').value);
+                } else {
+                    final.demand4 = parseFloat(document.getElementById('demandQuantity4').value) * (demandMul + 100) / 100;
+                }
+            }
+            function d5() {
+                if (isNaN(demandMul) || demandMul === 0) {
+                    initial.demand5 = parseFloat(document.getElementById('demandQuantity5').value);
+                } else {
+                    final.demand5 = parseFloat(document.getElementById('demandQuantity5').value) * (demandMul + 100) / 100;
+                }
+            }
+
+            function o1() {
+                if (isNaN(offerMul) || offerMul === 0) {
+                    initial.offer1 = parseFloat(document.getElementById('offerQuantity1').value);
+                } else {
+                    final.offer1 = parseFloat(document.getElementById('offerQuantity1').value) * (offerMul + 100) / 100;
+                }
+            }
+            function o2() {
+                if (isNaN(offerMul) || offerMul === 0) {
+                    initial.offer2 = parseFloat(document.getElementById('offerQuantity2').value);
+                } else {
+                    final.offer2 = parseFloat(document.getElementById('offerQuantity2').value) * (offerMul + 100) / 100;
+                }
+            }
+            function o3() {
+                if (isNaN(offerMul) || offerMul === 0) {
+                    initial.offer3 = parseFloat(document.getElementById('offerQuantity3').value);
+                } else {
+                    final.offer3 = parseFloat(document.getElementById('offerQuantity3').value) * (offerMul + 100) / 100;
+                }
+            }
+            function o4() {
+                if (isNaN(offerMul) || offerMul === 0) {
+                    initial.offer4 = parseFloat(document.getElementById('offerQuantity4').value);
+                } else {
+                    final.offer4 = parseFloat(document.getElementById('offerQuantity4').value) * (offerMul + 100) / 100;
+                }
+            }
+            function o5() {
+                if (isNaN(offerMul) || offerMul === 0) {
+                    initial.offer5 = parseFloat(document.getElementById('offerQuantity5').value);
+                } else {
+                    final.offer5 = parseFloat(document.getElementById('offerQuantity5').value) * (offerMul + 100) / 100;
+                }
+            }
+
+            //           
+            function newValues() {
+                priceMul = parseFloat(document.getElementById("priceRaise").value);
+                
+                if (isNaN(priceMul)) {
+                    priceMul = 0;
+                    document.getElementById('price1').value = initial.price1;
+                    document.getElementById('price2').value = initial.price2;
+                    document.getElementById('price3').value = initial.price3;
+                    document.getElementById('price4').value = initial.price4;
+                    document.getElementById('price5').value = initial.price5;
+                } else {
+                    final.price1 = initial.price1 * (priceMul + 100) / 100;
+                    final.price2 = initial.price2 * (priceMul + 100) / 100;
+                    final.price3 = initial.price3 * (priceMul + 100) / 100;
+                    final.price4 = initial.price4 * (priceMul + 100) / 100;
+                    final.price5 = initial.price5 * (priceMul + 100) / 100;
+
+
+                    document.getElementById('price1').value = final.price1;
+                    document.getElementById('price2').value = final.price2;
+                    document.getElementById('price3').value = final.price3;
+                    document.getElementById('price4').value = final.price4;
+                    document.getElementById('price5').value = final.price5;
+                }
+                demandMul = parseFloat(document.getElementById("demandRaise").value);
+
+                if (isNaN(demandMul)) {
+                    demandMul = 0;
+                    document.getElementById('demandQuantity1').value = initial.demand1;
+                    document.getElementById('demandQuantity2').value = initial.demand2;
+                    document.getElementById('demandQuantity3').value = initial.demand3;
+                    document.getElementById('demandQuantity4').value = initial.demand4;
+                    document.getElementById('demandQuantity5').value = initial.demand5;
+                } else {
+                    final.demand1 = initial.demand1 * (demandMul + 100) / 100;
+                    final.demand2 = initial.demand2 * (demandMul + 100) / 100;
+                    final.demand3 = initial.demand3 * (demandMul + 100) / 100;
+                    final.demand4 = initial.demand4 * (demandMul + 100) / 100;
+                    final.demand5 = initial.demand5 * (demandMul + 100) / 100;
+
+
+                    document.getElementById('demandQuantity1').value = final.demand1;
+                    document.getElementById('demandQuantity2').value = final.demand2;
+                    document.getElementById('demandQuantity3').value = final.demand3;
+                    document.getElementById('demandQuantity4').value = final.demand4;
+                    document.getElementById('demandQuantity5').value = final.demand5;
+                }
+                offerMul = parseFloat(document.getElementById("offerRaise").value);
+
+                if (isNaN(offerMul)) {
+                    offerMul = 0;
+                    document.getElementById('offerQuantity1').value = initial.offer1;
+                    document.getElementById('offerQuantity2').value = initial.offer2;
+                    document.getElementById('offerQuantity3').value = initial.offer3;
+                    document.getElementById('offerQuantity4').value = initial.offer4;
+                    document.getElementById('offerQuantity5').value = initial.offer5;
+                } else {
+                    final.offer1 = initial.offer1 * (offerMul + 100) / 100;
+                    final.offer2 = initial.offer2 * (offerMul + 100) / 100;
+                    final.offer3 = initial.offer3 * (offerMul + 100) / 100;
+                    final.offer4 = initial.offer4 * (offerMul + 100) / 100;
+                    final.offer5 = initial.offer5 * (offerMul + 100) / 100;
+
+
+
+                    document.getElementById('offerQuantity1').value = final.offer1;
+                    document.getElementById('offerQuantity2').value = final.offer2;
+                    document.getElementById('offerQuantity3').value = final.offer3;
+                    document.getElementById('offerQuantity4').value = final.offer4;
+                    document.getElementById('offerQuantity5').value = final.offer5;
+                }
+            }
+          
+
+            //in order to select which chart we will make
+            var choise = 0;
+            function updateValues(value) {
+                if (value === "0") {
+                    choise = 0;
+                }
+                else if (value === "1") {
+                    choise = 1;
+                } else {
+                    choise = 2;
+                }
+            }
+
+            //in order to delete previus charts
+            var i = 0;
+            function chart() {
+                //get the context of canvas
+                var ctx = document.getElementById('myChart').getContext('2d');
+                
+                if (i != 0) {
+                    mixedChart.destroy();
+                }
+                i++;
+                //creates charts depending on their choise
+                if (choise === 0) {
+                    
+                    mixedChart = new Chart(ctx, {
+
+                        type: 'scatter',
+                        data: {
+                            datasets: [{
+                                //backgroundColor: "red",
+                                label: 'Scatter ',
+                                data: [{
+                                    x: initial.demand1,
+                                    y: initial.price1
+                                }, {
+                                    x: initial.demand2,
+                                    y: initial.price2
+                                }, {
+                                    x: initial.demand3,
+                                    y: initial.price3
+                                }, {
+                                    x: initial.demand4,
+                                    y: initial.price4
+                                }, {
+                                    x: initial.demand5,
+                                    y: initial.price5
+                                }],
+                                pointBackgroundColor: 'red',
+                                borderColor: "red",         //xrwma grammis
+                                showLine: true,             //ta enwnei
+                                fill: false,                //den gemizei to katw meros
+                                pointRadius: 3,            //poso megalo einai to simadi
+                                tension: 0.3                //kabuli
+                            }, {
+                                label: 'Scatter ',
+                                data: [{
+                                    x: final.demand1,
+                                    y: final.price1
+                                }, {
+                                    x: final.demand2,
+                                    y: final.price2
+                                }, {
+                                    x: final.demand3,
+                                    y: final.price3
+                                }, {
+                                    x: final.demand4,
+                                    y: final.price4
+                                }, {
+                                    x: final.demand5,
+                                    y: final.price5
+                                }],
+                                borderColor: '#888',
+                                pointBackgroundColor: '#888',
+                                showLine: true,             //ta enwnei
+                                fill: false,                //den gemizei to katw meros
+                                pointRadius: 3,            //poso megalo einai to simadi
+                                tension: 0.3                //kabuli
+                            }
+                            ]
+
+                        },
+                        options: {
+                            
+                            legend: false,              //svinei tin etiketa apo panw                 
+                            scales: {
+                                xAxes: [{                  //axonas twn x (na ruthmisw egw ta MAXES)
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'ΠΟΣΟΤΗΤΑ'
+                                    },
+                                    ticks: {
+                                        min: 0,
+                                        //max: 10
+                                    },
+                                    gridLines: {
+                                        color: '#888',
+                                        drawOnChartArea: true
+                                    }
+                                }],
+                                yAxes: [{
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'ΤΙΜΗ'
+                                    },
+                                    ticks: {
+                                        min: 0,
+                                        // max: 8,
+
+                                    },
+                                    gridLines: {
+                                        color: '#888',
+                                        drawOnChartArea: true
+                                    }
+                                }]
+                            }
+                        }
+
+                    });
+                } else if (choise === 1) {
+                     mixedChart = new Chart(ctx, {
+                        type: 'scatter',
+                        data: {
+                            datasets: [{
+                                //backgroundColor: "red",
+                                label: 'Scatter ',
+                                data: [{
+                                    x: initial.offer1,
+                                    y: initial.price1
+                                }, {
+                                    x: initial.offer2,
+                                    y: initial.price2
+                                }, {
+                                    x: initial.offer3,
+                                    y: initial.price3
+                                }, {
+                                    x: initial.offer4,
+                                    y: initial.price4
+                                }, {
+                                    x: initial.offer5,
+                                    y: initial.price5
+                                }],
+                                pointBackgroundColor: 'green',
+                                borderColor: "green",         //xrwma grammis
+                                showLine: true,             //ta enwnei
+                                fill: false,                //den gemizei to katw meros
+                                pointRadius: 3,            //poso megalo einai to simadi
+                                tension: 0.3                //kabuli
+                            }, {
+                                label: 'Scatter ',
+                                data: [{
+                                    x: final.offer1,
+                                    y: final.price1
+                                }, {
+                                    x: final.offer2,
+                                    y: final.price2
+                                }, {
+                                    x: final.offer3,
+                                    y: final.price3
+                                }, {
+                                    x: final.offer4,
+                                    y: final.price4
+                                }, {
+                                    x: final.offer5,
+                                    y: final.price5
+                                }],
+                                borderColor: '#888',
+                                pointBackgroundColor: '#888',
+                                showLine: true,             //ta enwnei
+                                fill: false,                //den gemizei to katw meros
+                                pointRadius: 3,            //poso megalo einai to simadi
+                                tension: 0.3                //kabuli
+                            }
+                            ]
+
+                        },
+                        options: {
+                            legend: false,              //svinei tin etiketa apo panw                 
+                            scales: {
+                                xAxes: [{                  //axonas twn x (na ruthmisw egw ta MAXES)
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'ΠΟΣΟΤΗΤΑ'
+                                    },
+                                    ticks: {
+                                        min: 0,
+                                        //max: 10
+                                    },
+                                    gridLines: {
+                                        color: '#888',
+                                        drawOnChartArea: true
+                                    }
+                                }],
+                                yAxes: [{
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'ΤΙΜΗ'
+                                    },
+                                    ticks: {
+                                        min: 0,
+                                        // max: 8,
+
+                                    },
+                                    gridLines: {
+                                        color: '#888',
+                                        drawOnChartArea: true
+                                    }
+                                }]
+                            }
+                        }
+
+                    });
+                } else {
+                     mixedChart = new Chart(ctx, {
+                        type: 'scatter',
+                        data: {
+                            datasets: [{
+                                //backgroundColor: "red",
+                                label: 'Scatter ',
+                                data: [{                                                //kabuli prosforas------------------------
+                                    x: initial.offer1,
+                                    y: initial.price1
+                                }, {
+                                    x: initial.offer2,
+                                    y: initial.price2
+                                }, {
+                                    x: initial.offer3,
+                                    y: initial.price3
+                                }, {
+                                    x: initial.offer4,
+                                    y: initial.price4
+                                }, {
+                                    x: initial.offer5,
+                                    y: initial.price5
+                                }],
+                                pointBackgroundColor: 'green',
+                                borderColor: "green",         //xrwma grammis
+                                showLine: true,             //ta enwnei
+                                fill: false,                //den gemizei to katw meros
+                                pointRadius: 3,            //poso megalo einai to simadi
+                                tension: 0.3                //kabuli
+                            }, {                                                        //kabuli zitisis-------------------------
+                                //backgroundColor: "red",
+                                label: 'Scatter ',
+                                data: [{
+                                    x: initial.demand1,
+                                    y: initial.price1
+                                }, {
+                                    x: initial.demand2,
+                                    y: initial.price2
+                                }, {
+                                    x: initial.demand3,
+                                    y: initial.price3
+                                }, {
+                                    x: initial.demand4,
+                                    y: initial.price4
+                                }, {
+                                    x: initial.demand5,
+                                    y: initial.price5
+                                }],
+                                pointBackgroundColor: 'red',
+                                borderColor: "red",         //xrwma grammis
+                                showLine: true,             //ta enwnei
+                                fill: false,                //den gemizei to katw meros
+                                pointRadius: 3,            //poso megalo einai to simadi
+                                tension: 0.3                //kabuli
+                            }, {                                                        //metavoli zitisis-------------------------
+                                label: 'Scatter ',
+                                data: [{
+                                    x: final.demand1,
+                                    y: final.price1
+                                }, {
+                                    x: final.demand2,
+                                    y: final.price2
+                                }, {
+                                    x: final.demand3,
+                                    y: final.price3
+                                }, {
+                                    x: final.demand4,
+                                    y: final.price4
+                                }, {
+                                    x: final.demand5,
+                                    y: final.price5
+                                }],
+                                borderColor: '#888',
+                                pointBackgroundColor: '#888',
+                                showLine: true,             //ta enwnei
+                                fill: false,                //den gemizei to katw meros
+                                pointRadius: 3,            //poso megalo einai to simadi
+                                tension: 0.3                //kabuli
+                            }, {                                                        //metavoli prosforas-----------------
+                                label: 'Scatter ',
+                                data: [{
+                                    x: final.offer1,
+                                    y: final.price1
+                                }, {
+                                    x: final.offer2,
+                                    y: final.price2
+                                }, {
+                                    x: final.offer3,
+                                    y: final.price3
+                                }, {
+                                    x: final.offer4,
+                                    y: final.price4
+                                }, {
+                                    x: final.offer5,
+                                    y: final.price5
+                                }],
+                                borderColor: '#888',
+                                pointBackgroundColor: '#888',
+                                showLine: true,             //ta enwnei
+                                fill: false,                //den gemizei to katw meros
+                                pointRadius: 3,            //poso megalo einai to simadi
+                                tension: 0.3                //kabuli
+                            }
+                            ]
+
+                        },
+                        options: {
+                            legend: false,              //svinei tin etiketa apo panw                 
+                            scales: {
+                                xAxes: [{                  //axonas twn x (na ruthmisw egw ta MAXES)
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'ΠΟΣΟΤΗΤΑ'
+                                    },
+                                    ticks: {
+                                        min: 0,
+                                        //max: 10
+                                    },
+                                    gridLines: {
+                                        color: '#888',
+                                        drawOnChartArea: true
+                                    }
+                                }],
+                                yAxes: [{
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'ΤΙΜΗ'
+                                    },
+                                    ticks: {
+                                        min: 0,
+                                        // max: 8,
+
+                                    },
+                                    gridLines: {
+                                        color: '#888',
+                                        drawOnChartArea: true
+                                    }
+                                }]
+                            }
+                        }
+
+                    });
+                }
+            }
+
+        </script>
+</body>
+</html>
